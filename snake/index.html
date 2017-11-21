@@ -1,0 +1,96 @@
+<html>
+<head>
+    <style>
+    	body{
+    		margin: 0;
+    		overflow: hidden;
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id = "snakePlane"></canvas>
+
+    <script src="js/three.js"></script>
+    <script src="js/Snake.js"></script>
+    <script src="js/GameBoard.js"></script>
+    <script src="js/Point.js"></script>
+    <script>
+        let player;
+        let snakeSize = 50;
+        let width = 40;
+        let height = 40;
+        let board = new Array(width);
+        for(let i = 0; i < width - 1; i++) {
+            board[i] = new Array(height);
+            for(let j = 0; j < height - 1; j++) {
+                if(i == 0 || j == 0) {
+                    board[i][j] = 1;
+                }
+                else {
+                    board[i][j] = 0;
+                }
+            }
+
+        }
+        initPlayers();
+        let gb = new GameBoard(1, player, board, width, height, snakeSize);
+
+        eventListnersInit();
+        gb.init();
+        gb.game();
+
+
+        function initPlayers() {
+            let points = [new Point(1, -15), new Point(2, -15), new Point(3, -15),new Point(4, -15), new Point(5, -15), new Point(6, -13)];
+            player = new Snake("Robert", points, new THREE.CubeGeometry(snakeSize, snakeSize, snakeSize), new THREE.MeshLambertMaterial({color: 0x0000ff}), snakeSize, true);
+        }
+
+        function eventListnersInit() {
+            let onKeyDown = function ( event ) {
+                switch ( event.keyCode ) {
+                    case 87: // w
+                        gb.moveForward = true;
+                        break;
+                    case 65: // a
+                        gb.moveLeft = true; 
+                        break;
+                    case 83: // s
+                        gb.moveBackward = true;
+                        break;
+                    case 68: // d
+                        gb.moveRight = true;
+                        break;
+                    case 32: // space
+                        gb.newGame = true;
+                        break;
+                }
+            };
+            let onKeyUp = function ( event ) {
+                switch( event.keyCode ) {
+                    case 87: // w
+                        gb.moveForward = false;
+                        break;
+                    case 65: // a
+                        gb.moveLeft = false;
+                        break;
+                    case 83: // s
+                        gb.moveBackward = false;
+                        break;
+                    case 68: // d
+                        gb.moveRight = false;
+                        break;
+                    case 32: // space
+                        gb.newGame = false;
+                        break;
+                }
+            };
+
+            document.addEventListener( 'keydown', onKeyDown, false );
+            document.addEventListener( 'keyup', onKeyUp, false );
+        }
+
+
+    </script>
+</body>
+</html>
